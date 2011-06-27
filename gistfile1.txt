@@ -62,6 +62,6 @@ spending a huge amount of time writing whatever it is.  We need some criteria:
  * need distinction between compile-time and runtime constructs
  * need typed variables
  * something struct-like
-
+ * a way to define M1 ops composed from M0 ops
 
 
