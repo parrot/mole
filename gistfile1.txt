@@ -59,7 +59,9 @@ spending a huge amount of time writing whatever it is.  We need some criteria:
  * it shouldn't allow things that don't make sense in M0 (not sure what this means)
  * the language should allow CPS stuff, either directly or indirectly.
    Indirectly is probably easier.
-
+ * need distinction between compile-time and runtime constructs
+ * need typed variables
+ * something struct-like
 
 
 
