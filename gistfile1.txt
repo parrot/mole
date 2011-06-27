@@ -1,4 +1,7 @@
-We need some kind of overlay language for M0 that we can use to reimplement Parrot.  Writing poke_caller was hard and writing a factorial program will be harder.  Anything less trivial will require an actual compiler or code generator.  We have the following options:
+We need some kind of overlay language for M0 that we can use to reimplement
+Parrot.  Writing poke_caller was hard and writing a factorial program will be
+harder.  Anything less trivial will require an actual compiler or code
+generator.  We have the following options:
  1 (PIR/M0) emit M0 from PIR
  2 (nqp/M0) emit M0 from nqp
  3 (winxed/M0) emit M0 from winxed
@@ -6,14 +9,57 @@ We need some kind of overlay language for M0 that we can use to reimplement Parr
  5 (new-custom/M0) write a new compiler targeting M0 using a separate toolchain
  6 (steal/retarget) take someone's existing compiler, retarget it to M0
 
-PIR/M0 has the advantage that we'll need to do something similar later anyway.  Being able to translate from PIR to M0 will be necessary if we want to continue to support PIR, and we do.  I'm not sure if we'll want to replace Parrot's current C code with PIR, though.  This approach is worth considering.
+PIR/M0 has the advantage that we'll need to do something similar later anyway.
+Being able to translate from PIR to M0 will be necessary if we want to continue
+to support PIR, and we do.  I'm not sure if we'll want to replace Parrot's
+current C code with PIR, though.  This approach is worth considering.
 
-I don't like the idea of nqp/M0.  nqp is already quite slow and I don't see it being feasible to get a speed improvement by using it more internally.  It might be the case that we don't need to generate inefficient code to deal with lvalue semantics if the translation is well-designed.  There's also the concern that using nqp almost universally means using a bunch of pir:: garbage, which would make M0 translation less efficient.  Overall it's a fairly nice language, but I'm not certain that nqp/M0 is the best way forward.
+I don't like the idea of nqp/M0.  nqp is already quite slow and I don't see it
+being feasible to get a speed improvement by using it more internally.  It
+might be the case that we don't need to generate inefficient code to deal with
+lvalue semantics if the translation is well-designed.  There's also the concern
+that using nqp almost universally means using a bunch of pir:: garbage, which
+would make M0 translation less efficient.  Overall it's a fairly nice language,
+but I'm not certain that nqp/M0 is the best way forward.
 
-winxed/M0 is a nice option.  The compiler already exists and has an alternate version (winxedxx) that targets C++.  Unfortunately winxed isn't designed to support multiple codegen backends, so we'd have to either refactor codegen into a separate step (probably slowing down performance) or just fork it and write a new backend.  The language itself is quite pleasant, but the compiler needs work.  I'm still not convinced that this is a bad way forward.
+winxed/M0 is a nice option.  The compiler already exists and has an alternate
+version (winxedxx) that targets C++.  Unfortunately winxed isn't designed to
+support multiple codegen backends, so we'd have to either refactor codegen into
+a separate step (probably slowing down performance) or just fork it and write a
+new backend.  The language itself is quite pleasant, but the compiler needs
+work.  I'm still not convinced that this is a bad way forward.
 
-new-nqp/M0 brings with it the speed issues of nqp.  nqp is very much designed to support a highly flexible compilation workflow, so using it to generate M0 is a reasonable approach.  I'm not a fan of the langauge's speed and quirks, though.  This approach could be made to work but it doesn't sound like the best approach.
+new-nqp/M0 brings with it the speed issues of nqp.  nqp is very much designed
+to support a highly flexible compilation workflow, so using it to generate M0
+is a reasonable approach.  I'm not a fan of the langauge's speed and quirks,
+though.  This approach could be made to work but it doesn't sound like the best
+approach.
 
-new-custom/M0 is almost included for the sake of completeness.  I'm tired of writing meta-things and want to get some real work done.  Writing a new compiler from scratch is decidedly non-lazy.
+new-custom/M0 is almost included for the sake of completeness.  I'm tired of
+writing meta-things and want to get some real work done.  Writing a new
+compiler from scratch is decidedly non-lazy.
 
-steal/retarget is a generalization of the winxed/M0 approach.  Instead of retargeting winxed, we'd take an unrelated compiler for some language (js comes to mind) and target that at M0 using CPS for control flow.  This has the advantage that we're not writing (and debugging) a whole new compiler from scratch, but it depends on us finding an appropriately-licensed compiler for a suitable language and constructed in a modular fashion.  
+steal/retarget is a generalization of the winxed/M0 approach.  Instead of
+retargeting winxed, we'd take an unrelated compiler for some language (js comes
+to mind) and target that at M0 using CPS for control flow.  This has the
+advantage that we're not writing (and debugging) a whole new compiler from
+scratch, but it depends on us finding an appropriately-licensed compiler for a
+suitable language and constructed in a modular fashion.  
+
+
+
+Probably the biggest question is what language we want to use.  We'll be
+spending a huge amount of time writing whatever it is.  We need some criteria:
+
+ * how easy is the language to learn for people accustomed to C
+ * does the language has an object system?  We'll be implementing cmop (6model)
+   in it, so the object system needs to be either self-hosting or non-existent
+ * how efficiently does the language map to M0?  We want to generate efficient
+   M0 and to have a clear idea of what the M0 for a given snippet looks like
+ * it shouldn't allow things that don't make sense in M0 (not sure what this means)
+ * the language should allow CPS stuff, either directly or indirectly.
+   Indirectly is probably easier.
+
+
+
+
