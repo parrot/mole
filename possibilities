@@ -47,22 +47,3 @@ scratch, but it depends on us finding an appropriately-licensed compiler for a
 suitable language and constructed in a modular fashion.  
 
 
-
-Probably the biggest question is what language we want to use.  We'll be
-spending a huge amount of time writing whatever it is.  We need some criteria:
-
- * how easy is the language to learn for people accustomed to C
- * does the language has an object system?  We'll be implementing cmop (6model)
-   in it, so the object system needs to be either self-hosting or non-existent
- * how efficiently does the language map to M0?  We want to generate efficient
-   M0 and to have a clear idea of what the M0 for a given snippet looks like
- * it shouldn't allow things that don't make sense in M0 (not sure what this means)
- * the language should allow CPS stuff, either directly or indirectly.
-   Indirectly is probably easier.
- * need distinction between compile-time and runtime constructs
- * need typed variables
- * something struct-like
- * a way to define M1 ops composed from M0 ops
- * light syntax, easy to implement, no optimizations
- * if we want macros, they need to be way smaller than C's
-
