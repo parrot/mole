@@ -1,4 +1,3 @@
-
 Probably the biggest question is what language we want to use.  We'll be
 spending a huge amount of time writing whatever it is.  We need some criteria:
 
@@ -16,4 +15,8 @@ spending a huge amount of time writing whatever it is.  We need some criteria:
  * a way to define M1 ops composed from M0 ops
  * light syntax, easy to implement, no optimizations
  * if we want macros, they need to be way smaller than C's
-
+ * function-like casts will make the language much easier to parse visually
+ * int* x, y; means two int*
+ * easy to parse
+ * question: INSP only or something more fine-grained?
+ *
