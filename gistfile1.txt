@@ -63,5 +63,6 @@ spending a huge amount of time writing whatever it is.  We need some criteria:
  * need typed variables
  * something struct-like
  * a way to define M1 ops composed from M0 ops
-
+ * light syntax, easy to implement, no optimizations
+ * if we want macros, they need to be way smaller than C's
 
