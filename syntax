@@ -52,11 +52,13 @@ size             encoding        0x0             0x4             0x8            
 *structs*
 *********
 
-Once a struct is defined, it can be used wherever any other type can be used.
-Struct members are accessed using the '.' notation, as in C.  sizeof() can be
-used to determine the number of bytes required by the struct.  This is similar
-to C, except that sizeof() is purely a compile-time construct and can not be
-used to calculate the length of an array.
+Structs may be defined as below.  Once a struct is defined, it can be used
+wherever any other type can be used.  If a register is of a struct type, it is
+assumed to point to a region of memory with the specified layout.  Struct
+members are accessed using the '->' notation, as in C.  sizeof() can be used to
+determine the number of bytes required by the struct.  This is similar to C,
+except that sizeof() is purely a compile-time construct and can not be used to
+calculate the length of an array.
 
 struct {
     I int_thingy;
@@ -65,12 +67,11 @@ struct {
 
 var I quux;
 
-#XXX: does this do any kind of allocation or just say "when you're looking at st, it has this structure"
 var struct_thingy st;
 
 st = m0::sys_alloc sizeof(struct_thingy);
-st.int_thingy = 39292934;
-st.n_thingy   = 332.66;
+st->int_thingy = 39292934;
+st->n_thingy   = 332.66;
 
 
 ********
@@ -95,6 +96,27 @@ chunk main (I a1, I a2, I a3) {
     c::fprintf(stdout, "asdfw %d\n", i_thingy);
     call_chunk "chunk_name", arg_array;
 }
+
+
+
+*********************
+*calling conventions*
+*********************
+
+I don't know.  There are a couple options:
+
+1) The first is that all calling conventions need to be dealt with explicitly.
+This isn't nearly as bad as it'd be under M0 because of composed ops and it
+would allow a very high degree of control without requiring the management of
+all the minutae of the calling conventions more than once.
+
+2) The second option is to have a default set of calling conventions that are
+used with a simple minimalist syntax, but to allow them to be overridden with
+composed ops.
+
+3) The third option is to say that only the builtins can be used for control
+flow.  For a very experimental language like mole, this approach is probably
+insane.
 
 
 **************
