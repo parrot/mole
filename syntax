@@ -1,19 +1,77 @@
 possible syntax for mole ("M0 Overlay LanguagE")
+*******
+*types*
+*******
 
-- types
+I propose that we have 5 types; INSP for registers and cs, which is a C-like
+string.  (This probably won't be exactly like a C-string, but close enough that
+C code can use it if needed.)
 
 registers: I, N, S, P
 primitive string: cs
 
 
-- struct
+*****************
+*constant values*
+*****************
+
+This describes what kind of constants can be used in mole code.  
+
+int:  [1-9]\d*
+float: ...
+hex:  0[xX][0-9a-fA-F]+
+octal: 0[0-7]+
+string: "[...]" (with escapes) 
+
+
+
+************************
+*compile-time constants*
+************************
+
+
+
+**********************
+*working with strings*
+**********************
+
+Strings pretend to be 0-indexed.  They actually also store their length and
+encoding as the first five values.  The length is stored as a 4B int and the
+encoding is stored in one byte, with 3 unused bytes for padding.  The string
+for "hello, worlds?" would look as follows in memory:
+
+ 0x0             0x4             0x8             0xA             0x10            0x14
+---------------------------------------------------------------------------------------------
+|0x0|0x0|0x0|0xC|0x0|0x0|0x0|0x1| h | e | l | l | o | , |   | w | o | r | l | d | s | ? |\0 |
+---------------------------------------------------------------------------------------------
+size             encoding        0x0             0x4             0x8             0xA   
+
+
+
+*********
+*structs*
+*********
+
+Once a struct is defined, it can be used wherever any other type can be used.
+Struct members are accessed using the '.' notation, as in C.  sizeof() can be
+used to determine the number of bytes required by the struct.  This is similar
+to C, except that sizeof() is purely a compile-time construct and can not be
+used to calculate the length of an array.
 
 struct {
     I int_thingy;
     N n_thingy;
 } struct_thingy;
 
-- functions
+var I quux;
+var struct_thingy st;
+
+st = m0::sys_alloc sizeof(struct_thingy)
+
+
+***********
+*functions*
+***********
 
 chunk main (I a1, I a2, I a3) {
     const I stdout 1;
@@ -27,7 +85,11 @@ chunk main (I a1, I a2, I a3) {
     call_chunk "chunk_name", arg_array;
 }
 
-e composed op
+
+**************
+*composed ops*
+**************
+
   * acts like an inline function
   * has temporary registers, decleared inline
   * does not have an explict return statement
