@@ -64,6 +64,8 @@ struct {
 } struct_thingy;
 
 var I quux;
+
+#XXX: does this do any kind of allocation or just say "when you're looking at st, it has this structure"
 var struct_thingy st;
 
 st = m0::sys_alloc sizeof(struct_thingy);
@@ -116,8 +118,8 @@ init_cf_copy:
     new_cf[INTERP] = cf[INTERP];
     new_cf[CHUNK]  = cf[CHUNK];
     new_cf[CONSTS] = cf[CONSTS];
-    new_cf[MDS]    = cf[MDS]
-    new_cf[BCS]    = cf[BCS]
+    new_cf[MDS]    = cf[MDS];
+    new_cf[BCS]    = cf[BCS];
     new_cf[PCF]    = cf[CF];
     new_cf[CF]     = new_cf;
 
