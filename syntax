@@ -103,10 +103,11 @@ chunk main (I a1, I a2, I a3) {
 
 mole supports syntax to create composed ops which behave similarly to built-in
 M0 ops.  The syntax is similar to chunnks with a few differences.  Composed ops
-are declared using the "composed"keyword and do not have an explicit return
-statement.  They may take an arbitrary number of arguments.  Variables may be
-declared in composed ops as in functions.  composed ops are similar to inlined
-functions in C.
+are declared using the "composed" keyword and do not have return statements.
+Any values that the composed op needs to modify should passed as arguments.
+Using a return statement in composed op is a syntax error.  Composed ops may
+take an arbitrary number of arguments.  Variables may be declared in composed
+ops as in functions.  composed ops are similar to inlined functions in C.
 
 composed init_cf(P new_cf, I retpc_label) {
 alloc_cf:
