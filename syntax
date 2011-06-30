@@ -66,12 +66,21 @@ struct {
 var I quux;
 var struct_thingy st;
 
-st = m0::sys_alloc sizeof(struct_thingy)
+st = m0::sys_alloc sizeof(struct_thingy);
+st.int_thingy = 39292934;
+st.n_thingy   = 332.66;
 
 
-***********
-*functions*
-***********
+********
+*chunks*
+********
+
+Chunks are similar to functions.  They have a constants table, a metadata table
+and a bytecode segment.  Values can be added to the constants table by
+declaring a value with the keyword "const".  Annotations may be added
+automatically by the mole compiler and can also be added manually with the .ann
+"key" "value" syntax.
+
 
 chunk main (I a1, I a2, I a3) {
     const I stdout 1;
@@ -90,14 +99,17 @@ chunk main (I a1, I a2, I a3) {
 *composed ops*
 **************
 
-  * acts like an inline function
-  * has temporary registers, decleared inline
-  * does not have an explict return statement
+mole supports syntax to create composed ops which behave similarly to built-in
+M0 ops.  The syntax is similar to chunnks with a few differences.  Composed ops
+are declared using the "composed"keyword and do not have an explicit return
+statement.  They may take an arbitrary number of arguments.  Variables may be
+declared in composed ops as in functions.  composed ops are similar to inlined
+functions in C.
 
 composed init_cf(P new_cf, I retpc_label) {
 alloc_cf:
-    tmp I cf_size = 256;
-    tmp I flags = 0;
+    I cf_size = 256;
+    I flags = 0;
     new_cf = m0::gc_alloc cf_size, flags;
     
 init_cf_copy:
