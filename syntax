@@ -21,26 +21,41 @@ chunk main (I a1, I a2, I a3) {
     
     // annotation for the right file will be added by m1 compiler
     m0::print_i stdout, hello;
-    
     var I i_thingy;
-
     i_thingy += a3++;
-
     c::fprintf(stdout, "asdfw %d\n", i_thingy);
-    
-     
-
+    call_chunk "chunk_name", arg_array;
 }
 
-- composed op
-  * acts like a function
-  * has temporary registers
+e composed op
+  * acts like an inline function
+  * has temporary registers, decleared inline
   * does not have an explict return statement
 
-compose init_cf(I a1, I a2, I a3, N a4)
-    tmp I tmp0,
-    tmp N tmp1,
-{
+composed init_cf(P new_cf, I retpc_label) {
+alloc_cf:
+    tmp I cf_size = 256;
+    tmp I flags = 0;
+    new_cf = m0::gc_alloc cf_size, flags;
     
+init_cf_copy:
+    new_cf[INTERP] = cf[INTERP];
+    new_cf[CHUNK]  = cf[CHUNK];
+    new_cf[CONSTS] = cf[CONSTS];
+    new_cf[MDS]    = cf[MDS]
+    new_cf[BCS]    = cf[BCS]
+    new_cf[PCF]    = cf[CF];
+    new_cf[CF]     = new_cf;
 
+init_cf_zero:
+    new_cf[EH] = 0;
+    new_cf[RETPC] = 0;
+    new_cf[SPILLCF] = 0;
+    RETPC = retpc_label;
+
+init_cf_pc:
+    new_cf[PC] = post_set;
+    CF = new_cf;
+
+post_set:
 }
