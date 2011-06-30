@@ -1,0 +1,46 @@
+possible syntax for mole ("M0 Overlay LanguagE")
+
+- types
+
+registers: I, N, S, P
+primitive string: cs
+
+
+- struct
+
+struct {
+    I int_thingy;
+    N n_thingy;
+} struct_thingy;
+
+- functions
+
+chunk main (I a1, I a2, I a3) {
+    const I stdout 1;
+    const cs hello "ohai.  im in ur m0";
+    
+    // annotation for the right file will be added by m1 compiler
+    m0::print_i stdout, hello;
+    
+    var I i_thingy;
+
+    i_thingy += a3++;
+
+    c::fprintf(stdout, "asdfw %d\n", i_thingy);
+    
+     
+
+}
+
+- composed op
+  * acts like a function
+  * has temporary registers
+  * does not have an explict return statement
+
+compose init_cf(I a1, I a2, I a3, N a4)
+    tmp I tmp0,
+    tmp N tmp1,
+{
+    
+
+}
