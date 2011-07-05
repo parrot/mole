@@ -3,11 +3,11 @@ possible syntax for mole ("M0 Overlay LanguagE")
 *types*
 *******
 
-I propose that we have 6 types; INSP for registers, ar, which is a C-like array. (This probably won't be exactly like a C-array, but close enough that
-C code can use it if needed.) and cs, which is a C-like string, based on ar.
+I propose that we have 5 types; INSP for registers and cs, which is a C-like
+string.  (This probably won't be exactly like a C-string, but close enough that
+C code can use it if needed.)
 
 registers: I, N, S, P
-primitive array: ar
 primitive string: cs
 
 
@@ -29,17 +29,14 @@ string: "[...]" (with escapes)
 *compile-time constants*
 ************************
 
-*********************
-*working with arrays*
-*********************
-Arrays are 0-indexed, and also store their length in negative indices. These negative indices can be either allocated (and with indices offset), or virtualised and instead provided by the GC.
+
 
 **********************
 *working with strings*
 **********************
 
-Strings are 0-indexed.  They actually also store their length and
-encoding as the first five negative index values.  The length is stored as a 4B int and the
+Strings pretend to be 0-indexed.  They actually also store their length and
+encoding as the first five values.  The length is stored as a 4B int and the
 encoding is stored in one byte, with 3 unused bytes for padding.  The string
 for "hello, worlds?" would look as follows in memory:
 
@@ -50,7 +47,6 @@ for "hello, worlds?" would look as follows in memory:
 size             encoding        0x0             0x4             0x8             0xA   
 
 
-0x8 would be exposed as index 0 to the language.
 
 *********
 *structs*
